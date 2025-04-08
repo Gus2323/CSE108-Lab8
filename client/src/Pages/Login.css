@@ -1,0 +1,42 @@
+/* client/Pages/Login.css */
+.login-container {
+    background-image: url('../UC-Merced-Pic.png'); /* public/bg.jpg */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .login-box {
+    /* background-color: rgba(255, 255, 255, 0.85); */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .login-box input {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  .login-box button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+  }
+  
+  .login-box button:hover {
+    background-color: #0056b3;
+  }
+  

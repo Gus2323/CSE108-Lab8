@@ -1,0 +1,56 @@
+.student-view {
+    padding: 30px;
+    font-family: Arial, sans-serif;
+    background-color: #f5f7fa;
+    min-height: 100vh;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logout-button {
+    padding: 8px 16px;
+    background-color: #ff4d4d;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  h3 {
+    margin-top: 30px;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  li {
+    background-color: white;
+    margin: 10px 0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  button {
+    padding: 6px 12px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .full-class {
+    color: red;
+    font-weight: bold;
+  }
+  
