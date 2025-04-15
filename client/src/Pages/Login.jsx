@@ -1,21 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '../firebase';
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Simulate login
-    const role = 'student'; // Replace with actual API response later
+    try {
+      // Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-    if (role === 'student') navigate('/student');
-    else if (role === 'teacher') navigate('/teacher');
-    else if (role === 'admin') navigate('/admin');
-    else alert('Invalid login');
+      // Get role from Firestore
+      const userRef = doc(db, 'users', user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const role = userSnap.data().role;
+
+        // Redirect based on role
+        if (role === 'student') navigate('/student');
+        else if (role === 'teacher') navigate('/teacher');
+        else if (role === 'admin') navigate('/admin');
+        else alert('Unknown role');
+      } else {
+        alert('No role assigned to this user.');
+      }
+
+    } catch (error) {
+      console.error('Login failed:', error.message);
+      alert('Invalid login: ' + error.message);
+    }
   };
 
   return (
@@ -47,6 +68,9 @@ const Login = () => {
             Login
           </button>
         </form>
+        <p className="mt-3 text-center">
+          Don't have an account? <a href="/signup">Sign up</a>
+        </p>
       </div>
     </div>
   );
