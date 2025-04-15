@@ -1,32 +1,27 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Login from './Pages/Login';
-import StudentView from './Pages/StudentView';
 import Signup from './Pages/Signup';
-// import TeacherView from './Pages/TeacherView';
-// import AdminView from './Pages/AdminView';
+import StudentView from './Pages/StudentView';
 import PrivateRoute from './Components/PrivateRoute';
 
-
-function App() {
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
 
-        <Route
-          path="/student"
-          element={
-            <PrivateRoute>
-              <StudentView />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </Router>
+      <Route
+        path="/student"
+        element={
+          <PrivateRoute>
+            <StudentView />
+          </PrivateRoute>
+        }
+      />
+    </Routes>
   );
-}
+};
 
 export default App;
