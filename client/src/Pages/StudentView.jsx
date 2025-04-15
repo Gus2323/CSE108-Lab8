@@ -5,8 +5,11 @@ import { auth, db } from '../firebase';
 import Navbar from '../Components/Navbar';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './StudentView.css'
+import bgImage from '../ucm.jpg';
 
 const StudentView = () => {
+  const [userName, setUserName] = useState('');
   const [myClasses, setMyClasses] = useState([]);
   const [allClasses, setAllClasses] = useState([]);
   const [selectedClassId, setSelectedClassId] = useState(null);
@@ -16,7 +19,17 @@ const StudentView = () => {
   useEffect(() => {
     fetchMyClasses();
     fetchAllClasses();
+    fetchUserName(); // new
   }, []);
+
+  const fetchUserName = async () => {
+    const userId = auth.currentUser.uid;
+    const userRef = doc(db, 'users', userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      setUserName(userSnap.data().name); // assumes the field is called "name"
+    }
+  };
 
   const fetchAllClasses = async () => {
     const querySnapshot = await getDocs(collection(db, 'classes'));
@@ -59,22 +72,49 @@ const StudentView = () => {
       setStudentsInClass([]);
       return;
     }
-  
+
     setSelectedClassId(classId);
-  
+
     const classDoc = await getDoc(doc(db, 'classes', classId));
     const classData = classDoc.data();
-  
+
     const studentProfiles = await Promise.all(
-      (classData.students || []).map(async (uid) => {
-        const userSnap = await getDoc(doc(db, 'users', uid));
-        return userSnap.exists() ? userSnap.data() : null;
-      })
+      (classData.students || [])
+        .filter((uid) => typeof uid === 'string' && uid.trim() !== '')
+        .map(async (uid) => {
+          const userSnap = await getDoc(doc(db, 'users', uid));
+          return userSnap.exists() ? userSnap.data() : null;
+        })
     );
-  
+
+
     setStudentsInClass(studentProfiles.filter(Boolean));
   };
-  
+
+  const handleUnenroll = async (classId) => {
+    const userId = auth.currentUser.uid;
+    const classRef = doc(db, 'classes', classId);
+
+    try {
+      const classSnap = await getDoc(classRef);
+      if (!classSnap.exists()) return;
+
+      const classData = classSnap.data();
+      const updatedStudents = (classData.students || []).filter(uid => uid !== userId);
+
+      await updateDoc(classRef, {
+        students: updatedStudents,
+      });
+
+      alert(`You have been unenrolled from class ${classId}`);
+      fetchAllClasses();
+      fetchMyClasses();
+    } catch (error) {
+      console.error("Error unenrolling:", error);
+    }
+  };
+
+
 
   const handleLogout = () => {
     auth.signOut();
@@ -82,28 +122,43 @@ const StudentView = () => {
   };
 
   return (
-    <div className="bg-light min-vh-100">
-      <Navbar onLogout={handleLogout} />
+    <div className="bg-light min-vh-100" style={{
+      backgroundImage: `url(${bgImage})`,
+      backgroundSize: 'cover',
+      backgroundAttachment: 'fixed',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+    }}>
+      <Navbar userName={userName} onLogout={handleLogout} />
 
-      <div className="container mt-4">
+      <div className="container mt-4" >
         {/* My Classes */}
         <section className="mb-5">
           <h3>My Classes</h3>
           <div className="row">
             {myClasses.map((cls) => (
               <div key={cls.id} className="col-md-4 mb-3">
-                <div className="card shadow-sm">
-                  <div className="card-body">
-                    <h5 className="card-title">{cls.name}</h5>
-                    <p className="card-text">
-                      {cls.students.length}/{cls.capacity} students
-                    </p>
+                <div className="card frosted-card shadow-sm">
+                  <div className="card-body d-flex flex-column justify-content-between">
+                    <div>
+                      <h5 className="card-title">{cls.name}</h5>
+                      <p className="card-text">
+                        {(cls.students?.length || 0)}/{cls.capacity} students
+                      </p>
+                    </div>
+                    <button
+                      className="btn btn-sm btn-danger mt-2 align-self-start"
+                      onClick={() => handleUnenroll(cls.id)}
+                    >
+                      Unenroll
+                    </button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         </section>
+
 
         {/* All Classes */}
         <section>
@@ -114,12 +169,12 @@ const StudentView = () => {
                 key={cls.id}
                 className="col-md-6 col-lg-4 mb-4"
               >
-                <div className="card h-100 shadow-sm">
+                <div className="card h-100 frosted-card shadow-sm">
                   <div className="card-body d-flex flex-column justify-content-between">
                     <div>
                       <h5 className="card-title">{cls.name}</h5>
                       <p className="card-text">
-                        {cls.students.length}/{cls.capacity} students
+                        {(cls.students?.length || 0)}/{cls.capacity} students
                       </p>
                     </div>
 

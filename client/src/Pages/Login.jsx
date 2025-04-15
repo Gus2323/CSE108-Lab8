@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import "./Login.css"
+import bgImage from '../UC-Merced-Pic.png';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,8 +42,14 @@ const Login = () => {
   };
 
   return (
-    <div className="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
-      <div className="card shadow p-4" style={{ maxWidth: '400px', width: '100%' }}>
+    <div className="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light" style={{
+      backgroundImage: `url(${bgImage})`,
+      backgroundSize: 'cover',
+      backgroundAttachment: 'fixed',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+    }}>
+      <div className="card frosted-card shadow p-4" style={{ maxWidth: '400px', width: '100%' }}>
         <h3 className="mb-4 text-center">Login</h3>
         <form onSubmit={handleLogin}>
           <div className="mb-3">

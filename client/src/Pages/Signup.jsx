@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
+import bgImage from '../UC-Merced-Pic.png';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -36,7 +37,13 @@ const Signup = () => {
   };
 
   return (
-    <div className="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div className="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light" style={{
+      backgroundImage: `url(${bgImage})`,
+      backgroundSize: 'cover',
+      backgroundAttachment: 'fixed',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+    }}>
       <div className="card shadow p-4" style={{ maxWidth: '500px', width: '100%' }}>
         <h3 className="mb-4 text-center">Create Account</h3>
         <form onSubmit={handleSignup}>

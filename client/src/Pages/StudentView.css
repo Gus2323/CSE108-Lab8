@@ -22,6 +22,13 @@
   
   h3 {
     margin-top: 30px;
+    background: rgba(255, 255, 255, 0.75);
+    color: black;
+    padding: '10px 15px';
+    border-radius: '25px';
+    backdrop-filter: blur(20px);           /* frosted effect */
+    -webkit-backdrop-filter: blur(20px);
+    padding: 5px;
   }
   
   ul {
@@ -52,5 +59,22 @@
   .full-class {
     color: red;
     font-weight: bold;
+  }
+
+  .frosted-card {
+    background: rgba(255, 255, 255, 0.25); /* semi-transparent */
+    backdrop-filter: blur(20px);           /* frosted effect */
+    -webkit-backdrop-filter: blur(20px);   /* Safari support */
+    border: 1px solid rgb(255, 255, 255, 0.7);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  body {
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
   }
   
